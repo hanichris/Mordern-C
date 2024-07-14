@@ -84,4 +84,18 @@ circular* circular_resize(circular* c, size_t max_len);
  */
 size_t circular_getlength(circular* c);
 
+/**
+ * circular_getmaxlength - returns the size of the underlying array.
+ * @c: pointer to a circular type.
+ * Return: the size of the dynamic array.
+ */
+size_t circular_getmaxlength(circular* c);
+
+/**
+ * circular_setstartindex - set the starting index of the circular array.
+ * @c: pointer to a circular type.
+ * @start: starting index for the circular array.
+ */
+void circular_setstartindex(circular* c, size_t start);
+
 #endif

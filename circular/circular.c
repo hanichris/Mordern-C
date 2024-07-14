@@ -1,4 +1,5 @@
 #include "circular.h"
+#include <string.h>
 
 
 /**
@@ -34,6 +35,10 @@ void circular_destroy(circular* c){
 		free(c->tab);
 		circular_init(c, 0);
 	}
+}
+
+void circular_setstartindex(circular* c, size_t start){
+	if (c) c->start = start;
 }
 
 static size_t circular_getpos(circular* c, size_t pos){
@@ -87,3 +92,53 @@ double circular_pop(circular* c){
 size_t circular_getlength(circular* c){
 	return c->len;
 }
+
+circular* circular_resize(circular* c, size_t nlen){
+	if (c){
+		size_t len = c->len;
+		if (len > nlen) return 0;
+		size_t olen = c->max_len;
+		if (nlen != olen){
+			size_t ostart = circular_getpos(c, 0);
+			size_t nstart = ostart;
+			double* otab = c->tab;
+			double* ntab;
+			if (nlen > olen){
+				ntab = realloc(c->tab, sizeof(double[nlen]));
+				if (!ntab) return 0;
+				if (ostart + len > olen){
+					size_t ulen = olen - ostart;
+					size_t llen = len - ulen;
+					if (llen <= (nlen - olen)){
+						memcpy(ntab + olen, ntab, llen*sizeof(double));
+					} else {
+						nstart = nlen - ulen;
+						memmove(ntab + nstart, ntab + ostart, ulen*sizeof(double));
+					}
+				}
+			} else {
+				if (ostart + len > olen){
+					size_t ulen = olen - ostart;
+					nstart = nlen - ulen;
+					memmove(otab + nstart, otab + ostart, ulen*sizeof(double));
+				}
+
+				ntab = realloc(c->tab, sizeof(double[nlen]));
+				if (!ntab) return 0;
+				
+			}
+			*c = (circular){
+				.max_len = nlen,
+				.start = nstart,
+				.len = len,
+				.tab = ntab,
+			};
+		}
+	}
+	return c;
+}
+
+size_t circular_getmaxlength(circular* c){
+	return c->max_len;
+}
+
