@@ -122,3 +122,32 @@ fgetline(size_t size, char s[restrict size], FILE*restrict stream) {
 	}
 	return ret;
 }
+
+/**
+ * print a series of numbers `nums` in buf, using printf format `form`,
+ * separated by `sep` characters and terminated with a newline character.
+ * 
+ * @pre `tot` and `buf` are big enough. `form` is a format suitable to print
+ * size_t
+ * 
+ * @return Returns the number of characers printed to `buf`.
+ */
+static int sprintnumbers(size_t tot, char buf[restrict tot],
+						 char const form[restrict static 1],
+						 char const sep[restrict static 1],
+						 size_t len, size_t nums[restrict len]) {
+	char* p = buf; /* next position in the buffer. */
+	size_t const seplen = strlen(sep);
+	if (len) {
+		size_t i = 0;
+		for (;;) {
+			p += sprintf(p, form, nums[i]);
+			++i;
+			if (i >= len) break;
+			memcpy(p, sep, seplen);
+			p += seplen;
+		}
+	}
+	memcpy(p, "\n", 2);
+	return (p - buf) + 1;
+}
