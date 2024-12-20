@@ -1,6 +1,9 @@
 #ifndef ALLOCATION_H
 #define ALLOCATION_H 1
 
+#include <stdlib.h>
+#include <string.h>
+
 /**
  * circular - a type for a circular buffer with double values.
  * This data structure allows for the addition of double values
@@ -66,14 +69,19 @@ void circular_destroy(circular* c);
 [[nodiscard("pointer to allocated data dropped.")]]
 [[__gnu__::__malloc__, __gnu_free__(circular_delete)]]
 inline
-circular* circular_new(size_t len);
+circular* circular_new(size_t len) {
+	return circular_init(malloc(sizeof(circular)), len);
+}
 
 /**
  * circular_delete - Delete a circular buffer. @a c must have been allocated with a call
  * to ciruclar_new.
  */
 inline
-void circular_delete(circular* c);
+void circular_delete(circular* c) {
+	circular_destroy(c);
+	free(c);
+}
 
 // The flexibility of using a dynamically allocated array comes in when we would like to
 // resize the array. For regular array variables, the maximum number of elements that could
@@ -83,7 +91,7 @@ void circular_delete(circular* c);
  * circular_resize - Resize to capacity cap.
  */
 [[nodiscard("returned pointer replaces function argument.")]]
-circular* circular_resize(circular* c, size_t cap);
+circular* circular_resize(circular* c, size_t nlen);
 
 /**
  * circular_getlength = Return the number of elements stored.
