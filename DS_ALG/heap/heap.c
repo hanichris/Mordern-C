@@ -5,19 +5,13 @@
 #include "heap.h"
 
 [[deprecated("implementation")]]
-size_t heap_size(heap *h) {
-	if (h) {
-		return h->heap_size;
-	}
-	return 0;
+size_t heap_size(heap const* h) {
+	return h ? h->heap_size: 0;
 }
 
 [[deprecated("implementation")]]
-size_t heap_capacity(heap *h) {
-	if (h) {
-		return h->capacity;
-	}
-	return 0;
+size_t heap_capacity(heap const* h) {
+	return h ? h->capacity: 0;
 }
 
 [[deprecated("implementation")]]
@@ -26,10 +20,9 @@ heap* heap_init(heap *h, size_t cap) {
 		if (cap) {
 			*h = (heap) {
 				.capacity = cap,
-				.data = calloc(cap, sizeof(double)),
+				.data = { }, 
 			};
 
-			if(!h->data) h->capacity = 0;
 		} else {
 			*h = (heap) { };
 		}
@@ -37,10 +30,3 @@ heap* heap_init(heap *h, size_t cap) {
 	return h;
 }
 
-[[deprecated("implementation")]]
-void heap_destroy(heap *h) {
-	if (h) {
-		free(h->data);
-		heap_init(h, 0);
-	}
-}

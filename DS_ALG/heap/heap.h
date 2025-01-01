@@ -10,7 +10,7 @@ typedef struct heap heap;
 struct heap {
 	size_t capacity   [[deprecated("private")]];
 	size_t heap_size  [[deprecated("private")]];
-	double* data      [[deprecated("private")]];
+	double data[];
 };
 
 /**
@@ -21,18 +21,10 @@ struct heap {
 heap* heap_init(heap* h, size_t cap);
 
 /**
- * heap_destroy - Deallocates a heap object. `h` must have been initialised
- * with a call to `heap_init`.
- * @Returns: void.
- */
-void heap_destroy(heap* h);
-
-/**
  * heap_delete - delete a heap object. `h` must have been allocated with
  * a call to `heap_new`.
  */
 inline void heap_delete(heap* h) {
-	heap_destroy(h);
 	free(h);
 	h = 0;
 }
@@ -46,7 +38,10 @@ inline void heap_delete(heap* h) {
 [[__gnu__::__malloc__, __gnu_free__(heap_delete)]]
 inline
 heap* heap_new(size_t capacity) {
-	return heap_init((heap* )malloc(sizeof(heap)), capacity);
+	size_t size = offsetof(heap, data) + sizeof(double[capacity]);
+	if (size < sizeof(heap))
+		size = sizeof(heap);
+	return heap_init((heap* )malloc(size), capacity);
 }
 
 /**
@@ -59,11 +54,11 @@ heap* heap_resize(heap* h, size_t ncap);
  * heap_capacity - get the capacity of a heap object.
  * @Returns: capactiy of the heap. 0 if heap pointer is null.
  */
-size_t heap_capacity(heap* h);
+size_t heap_capacity(heap const* h);
 
 /**
  * heap_size - get the number of elements currently stored in the heap.
  * @Returns: element count. O if heap pointer is null.
  */
-size_t heap_size(heap* h);
+size_t heap_size(heap const* h);
 #endif
