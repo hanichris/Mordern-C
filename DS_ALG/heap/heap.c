@@ -2,6 +2,8 @@
 # pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
 
+#include <string.h>
+
 #include "heap.h"
 
 [[deprecated("implementation")]]
@@ -20,7 +22,6 @@ heap* heap_init(heap *h, size_t cap) {
 		if (cap) {
 			*h = (heap) {
 				.capacity = cap,
-				.data = { }, 
 			};
 
 		} else {
@@ -92,4 +93,17 @@ void max_heapify(heap* h, size_t idx) {
 		}
 
 	}
+}
+
+[[deprecated("implementation")]]
+heap* build_max_heap(size_t n, double const ar[static n]) {
+	heap* max_heap = heap_new(n);
+	if (max_heap) {
+		memcpy(max_heap->data, ar, sizeof(double[n]));
+		max_heap->heap_size = n;
+		for (int i = (n - 1) >> 1; i >= 0; --i)
+			max_heapify(max_heap, i);
+	}
+
+	return max_heap;
 }
