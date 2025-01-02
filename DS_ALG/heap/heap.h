@@ -45,9 +45,34 @@ heap* heap_new(size_t capacity) {
 }
 
 /**
+ * parent - get the parent index of the node at index `i`.
+ */
+inline
+size_t parent(size_t idx) {
+	return (idx - 1) >> 1;
+}
+
+/**
+ * left_child - get the index of the left child of the node at index `i`.
+ */
+inline
+size_t left_child(size_t idx) {
+	return (idx << 1) + 1;
+}
+
+/**
+ * right_child - get the index of the right child of the node at index `i`.
+ */
+inline
+size_t right_child(size_t idx) {
+	return (idx << 1) + 2;
+}
+
+/**
  * heap_resize - resize the heap to the new capacity `ncap`.
  * @Returns: pointer to resized heap object.
  */
+[[nodiscard("returned pointer replaces function argument.")]]
 heap* heap_resize(heap* h, size_t ncap);
 
 /**
@@ -61,4 +86,16 @@ size_t heap_capacity(heap const* h);
  * @Returns: element count. O if heap pointer is null.
  */
 size_t heap_size(heap const* h);
+
+/**
+ * max_heapify - maintains the max-heap property of a max-heap, h.
+ * @Returns: void.
+ */
+void max_heapify(heap* h, size_t idx);
+
+/**
+ * heap_element - returns a pointer to position `pos` in heap `h`.
+ * @Returns: pointer to element at `pos` of the heap, null otherwise.
+ **/
+double* heap_element(heap const* h, size_t pos);
 #endif
