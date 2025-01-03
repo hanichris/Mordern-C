@@ -29,15 +29,17 @@ int main(int argc, [[maybe_unused]]char* argv[argc]) {
 	}
 	putchar('\n');
 
-	heap* max_heap = build_max_heap(N, ar);
-
-	printf("\nHeap capacity: %zu\n", heap_capacity(max_heap));
-	printf("Count of elements in heap: %zu\n", heap_size(max_heap));
-	printf("Heap elements:\n");
-	for (unsigned i = 0; i < N; i++) {
-		printf("%g, ", max_heap->data[i]);
+	heap* max_heap = heap_sort(N, ar);
+	if (max_heap) {
+		printf("\nHeap capacity: %zu\n", heap_capacity(max_heap));
+		printf("Count of elements in heap: %zu\n", heap_size(max_heap));
+		printf("Sorted heap elements:\n");
+		for (unsigned i = 0; i < N; i++) {
+			printf("%g, ", max_heap->data[i]);
+		}
+		putchar('\n');
+		heap_delete(max_heap);
 	}
-	putchar('\n');
-	heap_delete(max_heap);
+
 	return 0;
 }
