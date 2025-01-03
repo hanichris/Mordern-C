@@ -101,6 +101,14 @@ void max_heapify(heap* h, size_t idx);
 heap* build_max_heap(size_t n, double const ar[static n]);
 
 /**
+ * heapsort - sorts the elements of an unordered array of size `n`
+ * through the use of a max-heap.
+ * @Returns: pointer to a heap whose elements are monotonically increasing.
+ */
+[[nodiscard("pointer to sorted max-heap dropped.")]]
+heap* heap_sort(size_t n, double const ar[static n]);
+
+/**
  * heap_element - returns a pointer to position `pos` in heap `h`.
  * @Returns: pointer to element at `pos` of the heap, null otherwise.
  **/

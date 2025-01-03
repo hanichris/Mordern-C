@@ -97,13 +97,31 @@ void max_heapify(heap* h, size_t idx) {
 
 [[deprecated("implementation")]]
 heap* build_max_heap(size_t n, double const ar[static n]) {
-	heap* max_heap = heap_new(n);
-	if (max_heap) {
-		memcpy(max_heap->data, ar, sizeof(double[n]));
-		max_heap->heap_size = n;
+	heap* h = heap_new(n);
+	if (h) {
+		memcpy(h->data, ar, sizeof(double[n]));
+		h->heap_size = n;
 		for (int i = (n - 1) >> 1; i >= 0; --i)
-			max_heapify(max_heap, i);
+			max_heapify(h, i);
 	}
 
+	return h;
+}
+
+[[deprecated("implementation")]]
+heap* heap_sort(size_t n, double const ar[static n]) {
+	heap* max_heap = build_max_heap(n, ar);
+	if (max_heap) {
+		for(size_t i = n - 1; i > 0; --i) {
+			double* cur_val = heap_element(max_heap, i);
+			double* first_val = heap_element(max_heap, 0);
+			double tmp = *first_val;
+			*first_val = *cur_val;
+			*cur_val = tmp;
+
+			--max_heap->heap_size;
+			max_heapify(max_heap, 0);
+		}
+	}
 	return max_heap;
 }
