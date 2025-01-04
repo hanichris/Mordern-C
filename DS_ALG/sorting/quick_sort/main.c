@@ -24,7 +24,7 @@ int main(void) {
 		printf("%g ", ar[i]);
 	putchar('\n');
 
-	quick_sort(ar,  0, N - 1);
+	randomized_quicksort(ar,  0, N - 1);
 
 	printf("\nArray elements after sorting.\n");
 	for (unsigned i = 0; i < N; i++)
