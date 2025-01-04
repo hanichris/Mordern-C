@@ -15,7 +15,6 @@ void swap(double* a, double* b) {
 static
 int partition(double* ar, int p, int r) {
 	double x = ar[r];
-	printf("Pivot: %g\n", x);
 	int i = p - 1;
 	for (int j = p; j < r; j++)
 		if (ar[j] <= x) {
@@ -36,8 +35,8 @@ void quick_sort(double* ar, int p, int r) {
 
 static
 int randomized_partition(double* ar, int p, int r) {
-	uint32_t i = arc4random() % (r + 1);
-	printf("Value chosen randomly: [%u] = %g\n", i, ar[i]);
+	// Pick a random number between [p, r]
+	uint32_t i = p + arc4random() % (r - p + 1);
 	swap(&ar[i], &ar[r]);
 	return partition(ar, p, r);
 }
