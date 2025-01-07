@@ -83,6 +83,13 @@ void post_order_destroy(node* n);
 void tree_insert(tree* t, node* z);
 
 /**
+ * tree_del_node - deletes the node `z` from the binary search
+ * tree `T`.
+ * @Returns: void.
+ */
+void tree_del_node(tree* t, node* z);
+
+/**
  * tree_search - iteratively searches for the node with the given key `k`
  * in the subtree rooted at `n`. If found, returns a pointer
  * to the node with key `k`. Otherwise, null.

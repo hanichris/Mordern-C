@@ -2,6 +2,17 @@
 
 #include "bst.h"
 
+static
+void transplant(tree* t, node* u, node* v) {
+	if (!u->p)
+		t->root = v;
+	else if (u->p->left == u)
+		u->p->left = v;
+	else
+		u->p->right = v;
+	if (v)
+		v->p = u->p;
+}
 
 node* node_init(node *n, double k) {
 	if (n) {
@@ -53,6 +64,29 @@ void tree_insert(tree* t, node* z) {
 		y->left = z;
 	else
 		y->right = z;
+}
+
+void tree_del_node(tree* t, node* z) {
+	if (!z->left)
+		// Replace z with its right child.
+		transplant(t, z, z->right);
+	else if (!z->right)
+		// Replace z with its left child.
+		transplant(t, z, z->left);
+	else {
+		// y is z's successor.
+		node* y = tree_min(z->right);
+		if (y != z->right) { // is y further down the subtree ?
+			transplant(t, y, y->right);
+			// z's right child becomes y's right child.
+			y->right = z->right;
+			y->right->p = y;
+		}
+		transplant(t, z, y); // replace z with its successor.
+		y->left = z->left;
+		y->left->p = y;
+	}
+	node_destroy(z);
 }
 
 node* tree_search(node* n, double k) {
